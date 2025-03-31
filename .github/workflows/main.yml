@@ -1,0 +1,46 @@
+name: IIS_Labs Vue.js CI/CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Build the project
+      - name: Build the project
+        run: npm run build
+
+      # Run tests (за потреби)
+      - name: Run tests
+        run: npm test
+
+      # Deploy
+      - name: Deploy application
+        run: |
+          npm install -g pm2
+          pm2 stop all || true
+          pm2 start npm --name "iis-labs-app" -- run dev
+          pm2 save
+
+      # Check PM2 status
+      - name: Check PM2 status
+        run: pm2 list
