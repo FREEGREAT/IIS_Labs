@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     stages {
-        stage('Installing NPM (if needed)') {
+        stage('Installing NPM (if needed) qq') {
             steps {
                 sh '''
                     if ! command -v npm &> /dev/null
